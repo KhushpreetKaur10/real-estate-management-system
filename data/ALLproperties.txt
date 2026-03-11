@@ -1,0 +1,7 @@
+1001 ; Delhi ; Apartment ; 45,00,000 ; Booked
+1002 ; Mumbai ; Villa ; 1,20,00,000 ; Available
+1004 ; Bangalore ; Studio ; 30,00,000 ; Booked
+1005 ; Pune ; Villa ; 94,00,000 ; Booked
+1006 ; Hyderabad ; Apartment ; 50,00,000 ; Available
+1008 ; Ahmedabad ; Bungalow ; 1,15,00,000 ; Available
+1009 ; Jaipur ; Apartment ; 41,00,000 ; Available
