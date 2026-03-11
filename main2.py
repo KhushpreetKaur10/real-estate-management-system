@@ -8,7 +8,8 @@ clients=[]
 clientBookings = [] 
 ADMINpassword='1234'
 
-
+if not os.path.exists("data"):
+    os.makedirs("data")
 
 
 def is_valid_email(email):
@@ -21,12 +22,12 @@ def is_valid_phone(phone):
 
 
 def writePropDataToFile():
-    if not os.path.exists('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt'):
-        open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w').close()
+    if not os.path.exists('data/ALLproperties.txt'):
+        open('data/ALLproperties.txt', 'w').close()
     print("\nEnter the following details to add a property record-\n")
     id = input("ID: ")
     exists = False
-    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'r') as f:
+    with open('data/ALLproperties.txt', 'r') as f:
         for line in f:
             parts = line.strip().split(";")
             if parts and parts[0].strip() == id:
@@ -37,7 +38,7 @@ def writePropDataToFile():
         type = input("Type: ")
         price = input("Price: ")
         status = 'Available'
-        with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'a') as f:
+        with open('data/ALLproperties.txt', 'a') as f:
             line = f"{id} ; {loc} ; {type} ; {price} ; {status}\n"
             f.write(line)
             print("Property details added successfully.")
@@ -48,7 +49,7 @@ def writePropDataToFile():
 def readPropFileStoreList():
     global properties
     properties = []
-    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'r') as f:
+    with open('data/ALLproperties.txt', 'r') as f:
         for line in f:
             id, loc, type, price, status = line.strip().split(";")
             properties.append({
@@ -62,7 +63,7 @@ def readPropFileStoreList():
 
 
 # auto incremented id
-def get_next_id(filename='C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLclients.txt'):
+def get_next_id(filename='data/ALLclients.txt'):
     max_id = 0
     if os.path.exists(filename):
         with open(filename, 'r') as f:
@@ -76,7 +77,7 @@ def get_next_id(filename='C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLcl
 
 
 def writeClientsData():
-    client_file = 'C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLclients.txt'
+    client_file = 'data/ALLclients.txt'
     print("\nADD A CLIENT -")
     name = input("Name: ")
     city = input("City: ")
@@ -120,7 +121,7 @@ def writeClientsData():
 def readClientFileStoreList():
     global clients
     clients = []
-    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLclients.txt', 'r') as f:
+    with open('data/ALLclients.txt', 'r') as f:
         for line in f:
             id, name, city, phone, email, password = line.strip().split(";")
             clients.append({
@@ -389,8 +390,8 @@ def bookProp():
                 prop['Status'] = new_status
                 print(f"✅ Booking successful for property ID {bookInput}.")
                 print(f"Status updated to 'Booked'.")
-                # Update C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt
-                with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w') as f:
+                # Update data/ALLproperties.txt
+                with open('data/ALLproperties.txt', 'w') as f:
                     for p in properties:
                         line = f"{p['ID'].strip()} ; {p['Location'].strip()} ; {p['Type'].strip()} ; {p['Price'].strip()} ; {p['Status'].strip()}\n"
                         f.write(line)
@@ -416,8 +417,8 @@ def cancelProp(currentClient):
                 if confirm.lower() == 'y':
                     prop['Status'] = 'Available'
                     print(f"✅ Booking cancelled for property ID {cancelInput}. Status updated to 'Available'.")
-                    # Update C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt
-                    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w') as f:
+                    # Update data/ALLproperties.txt
+                    with open('data/ALLproperties.txt', 'w') as f:
                         for p in properties:
                             line = f"{p['ID'].strip()} ; {p['Location'].strip()} ; {p['Type'].strip()} ; {p['Price'].strip()} ; {p['Status'].strip()}\n"
                             f.write(line)
@@ -451,7 +452,7 @@ def adminBookProp():
                     prop['Status'] = f'Booked By {client_id} on {datetime.now().strftime("%Y-%m-%d")}'
                     # prop['Booked By'] = client_id
                     print(f"✅ Property ID {book_input} successfully booked for client '{client['Name'].strip()}'.")
-                    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w') as f:
+                    with open('data/ALLproperties.txt', 'w') as f:
                         for p in properties:
                             line = f"{p['ID'].strip()} ; {p['Location'].strip()} ; {p['Type'].strip()} ; {p['Price'].strip()} ; {p['Status'].strip()}\n"
                             f.write(line)
@@ -478,7 +479,7 @@ def adminCancelProp():
                 prop['Status'] = 'Available'
                 clientBookings = [b for b in clientBookings if b['property']['ID'] != cancelInput]
                 print(f"✅ Booking cancelled for property ID {cancelInput}. Status updated to 'Available'.")
-                with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w') as f:
+                with open('data/ALLproperties.txt', 'w') as f:
                     for p in properties:
                         line = f"{p['ID'].strip()} ; {p['Location'].strip()} ; {p['Type'].strip()} ; {p['Price'].strip()} ; {p['Status'].strip()}\n"
                         f.write(line)
@@ -512,7 +513,7 @@ def delProp():
                 if confirm == 'y':
                     properties.remove(prop)
                     # update file
-                    with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLproperties.txt', 'w') as f:
+                    with open('data/ALLproperties.txt', 'w') as f:
                         for p in properties:
                             f.write(f"{p['ID'].strip()} ; {p['Location'].strip()} ; {p['Type'].strip()} ; {p['Price'].strip()} ; {p['Status'].strip()}\n")
                     print(f"✅ Record for property ID {delID} deleted successfully.")
@@ -583,7 +584,7 @@ def removeClient():
             confirm = input(f"Are you sure you want to remove client '{client_to_remove['Name']}'? (y/n): ").lower()
             if confirm == 'y':
                 clients.remove(client_to_remove)
-                with open('C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLclients.txt', 'w') as f:
+                with open('data/ALLclients.txt', 'w') as f:
                     for client in clients:
                         line = f"{client['ID']} ; {client['Name']} ; {client['City']} ; {client['Phone Number']} ; {client['Email']} ; {client['Password']}\n"
                         f.write(line)
@@ -704,7 +705,7 @@ def changePass():
         else:
             break
     matched_client['Password'] = new_password
-    with open("C:/Users/hp/Music/PYTHON GATEWAY/realEstateFinal/ALLclients.txt", "w") as f:
+    with open("data/ALLclients.txt", "w") as f:
         for client in clients:
             line = f"{client['ID']} ; {client['Name']} ; {client['City']} ; {client['Phone Number']} ; {client['Email']} ; {client['Password']}\n"
             f.write(line)
@@ -880,6 +881,7 @@ def main():
                 print("⚠️  : Invalid choice!\n")
         except ValueError:
             print("⚠️  : Invalid input! Enter only numeric value.\n")
+
 
 
 
